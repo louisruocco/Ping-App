@@ -1,23 +1,23 @@
 install-module mdbc
 import-module mdbc
 connect-mdbc . ping ips
+function addIP {
+    param (
+        [string]$ipPrompt, 
+        [string]$namePrompt
+    )
 
-function addRecord($ip, $name) {
-    $ip = Read-Host -Prompt "Please Type IP Address here"
-    $name = Read-Host -Prompt "Please Type the name of the device this IP address relates to"
-    action
+    $ip = Read-Host -Prompt $ipPrompt
+    $checkIP = get-mdbcdata @{ip = $ip}
+    if($checkIP.ip -eq $ip){
+        write-host "Record already exists!"
+        start-sleep 1
+        return
+    } else {
+        $name = Read-Host -Prompt $namePrompt
+        @{ip = $ip; name = $name; date = Get-Date} | add-mdbcdata
+        write-host "$ip successfully added! Please type 'addIP' to add another IP address or 'showRecords' to see what IP addresses are already inputted"
+    }
 }
 
-function action {
-    $getIP = get-mdbcdata @{ip = $ip}
-    if($getIP.ip -eq $ip){
-        return write-output "Device Already Exists! Please type 'addRecord' to try again"
-    } else {
-        @{ip = $ip; name = $name} | add-mdbcdata
-        write-output "Device: $name with $ip added Successfully!"
-        start-sleep 1
-        write-output "Please type 'addRecord' to add another IP Address"
-    }
-}   
-
-addRecord -ip (action)
+addIP "Please Add IP Address Here" "Please Add the name of the device here"
