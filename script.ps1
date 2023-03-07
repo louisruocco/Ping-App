@@ -9,11 +9,6 @@ if(get-module mdbc){
     Write-Host "Type 'addIP to add an IP address or 'showRecords to show all existing IPs"
 }
 
-$pingIPs = get-mdbcdata
-write-host "Pinging IPs..."
-start-sleep 1
-write-host $pingIPs
-
 function addIP {
     $ip = Read-Host -Prompt "Please Add IP Address Here"
     $checkIP = get-mdbcdata @{ip = $ip}
@@ -35,8 +30,7 @@ function showRecords {
         [string]$getIPs
     )
 
-    $getIPs = Get-MdbcData
-
+    $getIPs = get-mdbcdata
     write-host "Here is a list of all the existing IPs inputted and pingable:"
     if($getIPs -eq $null){
         start-sleep 1s
