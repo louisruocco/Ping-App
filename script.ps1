@@ -25,7 +25,7 @@ function addIP {
 }
 
 function showRecords {
-    $getIPs = get-mdbcdata
+    $getIPs = get-mdbcdata -As PS
     write-host "Here is a list of all the existing IPs inputted and pingable:"
     if($getIPs -eq $null){
         start-sleep 1s
@@ -38,25 +38,21 @@ function showRecords {
 }
 
 function logs {
-    param (
-        [string]$devices
-    )
     connect-mdbc . ping logs
-    $devices = Get-MdbcData
+    $devices = Get-MdbcData -As PS
     foreach($name in $devices){
-        write-output $devices
+        write-host $name.name "-" $name.ip "-" $name.status "-" $name.date
     }
 }
 
 function log {
     param (
+        [Parameter(Mandatory)]
         [string]$device,
+
         [string]$deviceName
     )
     connect-mdbc . ping logs
     $device = get-mdbcdata @{name = $deviceName}
     write-host $device
 }
-
-
-Start-Job -FilePath .\sched.ps1

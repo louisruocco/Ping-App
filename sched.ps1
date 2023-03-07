@@ -5,7 +5,7 @@ function runPing {
     foreach($ip in $ips.ip){
         Connect-Mdbc . ping logs
         $ping = Test-Connection $ip -count 1 -quiet
-        @{ip = $ip; date = Get-Date ; status = $ping} | Add-MdbcData
+        @{name = $name; ip = $ip; date = Get-Date ; status = $ping} | Add-MdbcData
     }
 }
 
