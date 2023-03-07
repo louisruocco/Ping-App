@@ -25,17 +25,15 @@ function addIP {
 }
 
 function showRecords {
-    param (
-        [string]$getIPs
-    )
-
     $getIPs = get-mdbcdata
     write-host "Here is a list of all the existing IPs inputted and pingable:"
     if($getIPs -eq $null){
         start-sleep 1s
         return write-host "No IPs added! please type 'addIP' to add an IP address"
     } else {
-        $getIPs
+        foreach($ip in $getIPs){
+            write-host $ip.name ":" $ip.ip
+        }
     }
 }
 
