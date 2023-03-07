@@ -8,7 +8,6 @@ if(get-module mdbc){
     write-host "Installing mdbc module..."
     Write-Host "Type 'addIP to add an IP address or 'showRecords to show all existing IPs"
 }
-
 function addIP {
     $ip = Read-Host -Prompt "Please Add IP Address Here"
     $checkIP = get-mdbcdata @{ip = $ip}
@@ -50,3 +49,16 @@ function logs {
         write-output $devices
     }
 }
+
+function log {
+    param (
+        [string]$device,
+        [string]$deviceName
+    )
+    connect-mdbc . ping logs
+    $device = get-mdbcdata @{name = $deviceName}
+    write-host $device
+}
+
+
+Start-Job -FilePath .\sched.ps1
