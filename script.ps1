@@ -1,8 +1,12 @@
-install-module mdbc
 import-module mdbc
 connect-mdbc . ping ips
 
-Write-Host "Type 'addIP to add an IP address or 'showRecords to show all existing IPs"
+if(get-module mdbc){
+    Write-Host "Type 'addIP to add an IP address or 'showRecords to show all existing IPs"
+} else {
+    install-module mdbc
+}
+
 function addIP {
     $ip = Read-Host -Prompt "Please Add IP Address Here"
     $checkIP = get-mdbcdata @{ip = $ip}
@@ -18,6 +22,17 @@ function addIP {
 }
 
 function showRecords {
+    param (
+        [string]$getIPs
+    )
+
+    $getIPs = Get-MdbcData
+
     write-host "Here is a list of all the existing IPs inputted and pingable:"
-    Get-MdbcData
+    if($getIPs -eq $null){
+        start-sleep 1
+        write-host "No IPs added! please type 'addIP' to add an IP address"
+    } else {
+        $getIPs
+    }
 }
